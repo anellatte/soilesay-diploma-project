@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Container, Alert, Form } from 'react-bootstrap';
-import { getUserProfile, getSozdlyByLevel, updateSozdlyLevel, getCompletedSozdly } from '../api';
+import { getUserProfile, getSozdlyByLevel, updateSozdlyLevel } from '../api';
 
 const kazakhAlphabet = [
     'А', 'Ә', 'Б', 'В', 'Г', 'Ғ', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Қ', 'Л', 'М', 'Н', 'Ң', 'О', 'Ө', 'П',
@@ -13,7 +13,6 @@ const Sozdly = () => {
     const [attempt, setAttempt] = useState(0);
     const [feedbackMessage, setFeedbackMessage] = useState('');
     const [sozdlyLevel, setSozdlyLevel] = useState(1);
-    const [completedLevels, setCompletedLevels] = useState([]);
     const [currentLevel, setCurrentLevel] = useState(1);
     const [currentWord, setCurrentWord] = useState('');
     const [noMoreLevels, setNoMoreLevels] = useState(false);
@@ -35,9 +34,6 @@ const Sozdly = () => {
                 } else {
                     setFeedbackMessage('Failed to load sozdly level');
                 }
-
-                const completedData = await getCompletedSozdly();
-                setCompletedLevels(completedData);
             } catch (error) {
                 setFeedbackMessage('Failed to fetch user data');
             }
@@ -47,7 +43,7 @@ const Sozdly = () => {
             try {
                 const response = await fetch('/sozdle/words.json');
                 const data = await response.json();
-                const upperCaseWords = data.map(word => word.toUpperCase()); // Преобразуем слова в верхний регистр
+                const upperCaseWords = data.map(word => word.toUpperCase());
                 setWordsList(upperCaseWords);
             } catch (error) {
                 setFeedbackMessage('Failed to load words list');
@@ -116,7 +112,7 @@ const Sozdly = () => {
 
         if (currentGuess === currentWord) {
             setFeedbackMessage('Correct!');
-            setIsLevelCompleted(true); // Set level as completed
+            setIsLevelCompleted(true);
             try {
                 const response = await updateSozdlyLevel(currentLevel);
                 if (response.message === 'No more levels') {
@@ -125,20 +121,16 @@ const Sozdly = () => {
                 } else if (response.sozdlyLevel !== sozdlyLevel) {
                     setSozdlyLevel(response.sozdlyLevel);
                     setCurrentLevel(response.sozdlyLevel);
-                    // Fetch new data for the new level
                     const sozdlyData = await getSozdlyByLevel(response.sozdlyLevel);
                     if (sozdlyData && sozdlyData.word) {
                         setCurrentWord(sozdlyData.word.toUpperCase());
                         setGuesses(Array(6).fill(''));
                         setCurrentGuess('');
                         setAttempt(0);
-                        setNoMoreLevels(false); // New level found, reset no more levels message
+                        setNoMoreLevels(false);
                     } else {
-                        setNoMoreLevels(true); // No new level found, set no more levels message
+                        setNoMoreLevels(true);
                     }
-                    // Update completed levels
-                    const completedData = await getCompletedSozdly();
-                    setCompletedLevels(completedData);
                 } else {
                     setFeedbackMessage('Correct, try the next level.');
                 }
@@ -164,9 +156,9 @@ const Sozdly = () => {
                 setAttempt(0);
                 setFeedbackMessage('');
                 setCurrentLevel(level);
-                setNoMoreLevels(false); // Reset no more levels message when switching levels
-                setIsLevelCompleted(false); // Reset level completion state
-                setKeyColors({}); // Reset keyboard colors
+                setNoMoreLevels(false);
+                setIsLevelCompleted(false);
+                setKeyColors({});
             } else {
                 setFeedbackMessage('Failed to load sozdly level');
             }

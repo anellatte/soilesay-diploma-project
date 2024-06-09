@@ -13,7 +13,8 @@ const Tanda = () => {
                         width="100%"  // Responsive width
                         height="600"  // Fixed height, adjust as needed
                         style={{ border: 'none' }}  // Optional, removes border
-                        scrolling="yes">
+                        scrolling="yes"
+                        allow="fullscreen">
                     </iframe>
 
                 </div>

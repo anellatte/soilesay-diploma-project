@@ -143,22 +143,15 @@ const SuraqJauap = () => {
             <div className='levels'>
                 <div className='levels__inner'>
                     <h2 className="levels__title">LEVELS</h2>
-                    {[...Array(currentLevel).keys()].map(i => {
-                        const level = i + 1;
-                        const isDisabled = level > currentLevel;
-
-                        return (
-                            <Button
-                                key={level}
-                                className="level__number"
-                                onClick={() => handleLevelClick(level)}
-                                disabled={isDisabled}
-                                style={isDisabled ? { backgroundColor: 'grey', cursor: 'not-allowed' } : {}}
-                            >
-                                Level {level}
-                            </Button>
-                        );
-                    })}
+                    {completedLevels.map(level => (
+                        <Button
+                            key={level._id}
+                            className="level__number"
+                            onClick={() => handleLevelClick(level.level)}
+                        >
+                            Level {level.level}
+                        </Button>
+                    ))}
                 </div>
             </div>
         </Container>

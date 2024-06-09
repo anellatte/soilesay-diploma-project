@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Button, Alert } from 'react-bootstrap';
-import { getUserProfile, getMaqalDropByLevel, updateMaqalDropLevel, getCompletedMaqalDrop } from '../api';
+import { getUserProfile, getMaqalDropByLevel, updateMaqalDropLevel } from '../api';
 
 const MaqalDrop = () => {
     const [initialWords, setInitialWords] = useState([]);
     const [arrangedWords, setArrangedWords] = useState([]);
     const [maqalDropLevel, setMaqalDropLevel] = useState(1);
-    const [completedLevels, setCompletedLevels] = useState([]);
     const [currentLevel, setCurrentLevel] = useState(1);
     const [feedbackMessage, setFeedbackMessage] = useState('');
     const [noMoreLevels, setNoMoreLevels] = useState(false);
@@ -26,10 +25,6 @@ const MaqalDrop = () => {
                 } else {
                     setFeedbackMessage('Failed to load MaqalDrop level');
                 }
-
-                const completedData = await getCompletedMaqalDrop();
-                console.log('Completed Data:', completedData);
-                setCompletedLevels(completedData);
             } catch (error) {
                 console.error('Error fetching user data:', error);
                 setFeedbackMessage('Failed to fetch user data');
@@ -85,11 +80,12 @@ const MaqalDrop = () => {
                 if (response.message === 'No more levels') {
                     setNoMoreLevels(true);
                     setFeedbackMessage('');
-                } else if (response.maqalLevel !== maqalDropLevel) {
-                    setMaqalDropLevel(response.maqalLevel);
-                    setCurrentLevel(response.maqalLevel);
+                } else {
+                    const nextLevel = response.maqalLevel;
+                    setMaqalDropLevel(nextLevel);
+                    setCurrentLevel(nextLevel);
                     // Fetch new data for the new level
-                    const newMaqalDropData = await getMaqalDropByLevel(response.maqalLevel);
+                    const newMaqalDropData = await getMaqalDropByLevel(nextLevel);
                     if (newMaqalDropData && newMaqalDropData.sentence) {
                         setInitialWords(shuffleWords(newMaqalDropData.sentence.split(' ')));
                         setArrangedWords([]);
@@ -97,11 +93,6 @@ const MaqalDrop = () => {
                     } else {
                         setNoMoreLevels(true); // No new level found, set no more levels message
                     }
-                    // Update completed levels
-                    const completedData = await getCompletedMaqalDrop();
-                    setCompletedLevels(completedData);
-                } else {
-                    setFeedbackMessage('Correct, try the next level.');
                 }
             } catch (error) {
                 console.error('Error updating MaqalDrop level:', error);
@@ -141,9 +132,9 @@ const MaqalDrop = () => {
                         <p className='suraq-desc__title'>Level {currentLevel}</p>
                         <div className="word-containers">
                             <div className="word-container"
-                                onDragOver={onDragOver}
-                                onDrop={(event) => onDrop(event, false)}
-                                style={{ border: '1px solid #ccc', padding: '10px', minHeight: '50px' }}
+                                 onDragOver={onDragOver}
+                                 onDrop={(event) => onDrop(event, false)}
+                                 style={{ border: '1px solid #ccc', padding: '10px', minHeight: '50px' }}
                             >
                                 {arrangedWords.map((word, index) => (
                                     <Button
@@ -160,9 +151,9 @@ const MaqalDrop = () => {
                             </div>
                             {initialWords.length > 0 && (
                                 <div className="word-container"
-                                    onDragOver={onDragOver}
-                                    onDrop={(event) => onDrop(event, true)}
-                                    style={{ border: '1px solid #ccc', padding: '10px', minHeight: '50px', marginTop: '20px' }}
+                                     onDragOver={onDragOver}
+                                     onDrop={(event) => onDrop(event, true)}
+                                     style={{ border: '1px solid #ccc', padding: '10px', minHeight: '50px', marginTop: '20px' }}
                                 >
                                     {initialWords.map((word, index) => (
                                         <Button
