@@ -68,6 +68,7 @@ const AdminPage = () => {
                     <Link to="/admin/sj" className="btn btn-secondary mr-2">Suraq - Jauap</Link>
                     <Link to="/admin/talda" className="btn btn-secondary">Talda</Link>
                     <Link to="/admin/sozdly" className="btn btn-secondary">Sozdly</Link>
+                    <Link to="/admin/puzzle" className="btn btn-secondary">Puzzle</Link>
                 </div>
                 <h3>Events</h3>
                 <Row>

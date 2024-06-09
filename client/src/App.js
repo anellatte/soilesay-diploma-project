@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Account from "./components/account/Account";
 import Sidebar from "./components/sidebar/Sidebar";
 import SuraqJauap from "./components/suraq-jauap/SuraqJauap";
@@ -27,10 +27,14 @@ import AdminMDEdit from './components/admin/AdminMDEdit';
 import AdminSozdly from './components/admin/AdminSozdly';
 import AdminSozdlyAdd from './components/admin/AdminSozdlyAdd';
 import AdminSozdlyEdit from './components/admin/AdminSozdlyEdit';
+import AdminPuzzle from "./components/admin/AdminPuzzle";
+import AdminPuzzleAdd from "./components/admin/AdminPuzzleAdd";
+import AdminPuzzleEdit from "./components/admin/AdminPuzzleEdit";
 import ErrorBoundary from "./components/ErrorBoundary";
 import LandingPage from './components/landing/LandingPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
+
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -100,6 +104,7 @@ function App() {
                                             <Route path="/admin/sj" element={<AdminSuraqJauap username={userData.username} />} />
                                             <Route path="/admin/talda" element={<AdminTalda />} />
                                             <Route path="/admin/sozdly" element={<AdminSozdly />} />
+                                            <Route path="/admin/puzzle" element={<AdminPuzzle />} />
                                             <Route path="/admin" element={
                                                 <>
                                                     <AdminPage />
@@ -115,6 +120,8 @@ function App() {
                                             <Route path="/admin/maqaldrop/edit/:id" element={<AdminMDEdit />} />
                                             <Route path="/admin/sozdly/add" element={<AdminSozdlyAdd />} />
                                             <Route path="/admin/sozdly/edit/:id" element={<AdminSozdlyEdit />} />
+                                            <Route path="/admin/puzzle/add" element={<AdminPuzzleAdd />} />
+                                            <Route path="/admin/puzzle/edit/:id" element={<AdminPuzzleEdit />} />
                                         </>
                                     )}
                                 </Routes>

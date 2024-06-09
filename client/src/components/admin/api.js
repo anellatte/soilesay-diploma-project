@@ -296,5 +296,55 @@ export const deleteMaqalDrop = async (id) => {
         throw error;
     }
 };
+// Puzzle API calls
 
+export const getAllPuzzles = async () => {
+    try {
+        const response = await api.get('/puzzle/all'); // Ensure this endpoint is correct
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching puzzles:', error);
+        throw error;
+    }
+};
+
+export const addPuzzle = async (puzzleData) => {
+    try {
+        const response = await api.post('/puzzle', puzzleData);
+        return response.data;
+    } catch (error) {
+        console.error('Error adding puzzle:', error);
+        throw error;
+    }
+};
+
+export const getPuzzleById = async (id) => {
+    try {
+        const response = await api.get(`/puzzle/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching puzzle by ID:', error);
+        throw error;
+    }
+};
+
+export const editPuzzle = async (id, puzzleData) => {
+    try {
+        const response = await api.put(`/puzzle/${id}`, puzzleData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating puzzle:', error);
+        throw error;
+    }
+};
+
+export const deletePuzzle = async (id) => {
+    try {
+        const response = await api.delete(`/puzzle/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting puzzle:', error);
+        throw error;
+    }
+};
 export default api;

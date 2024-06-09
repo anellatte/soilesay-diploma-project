@@ -39,6 +39,15 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 1
   },
+  PuzzleLevel: {
+    type: Number,
+    default: 1
+  },
+  TyndaLevel: {
+    type: Number,
+    default: 1
+  },
+
   notifications: [{
     message: { type: String },
     isRead: { type: Boolean, default: false }

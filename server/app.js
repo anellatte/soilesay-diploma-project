@@ -11,6 +11,8 @@ const profileRouter = require("./router/profile");
 const taldaRouter = require("./router/talda");
 const eventRouter = require("./router/event");
 const sozdlyRouter = require('./router/sozdly');
+const puzzleRouter = require('./router/puzzle');
+const tyndaRouter = require('./router/tynda');
 
 
 
@@ -28,6 +30,9 @@ app.use("/api/talda", taldaRouter);
 app.use("/api/sj", suraqJauapRouter);
 app.use("/api/events", eventRouter);  
 app.use('/api/sozdly', sozdlyRouter);
+app.use("/api/puzzle", puzzleRouter);
+app.use("/api/tynda", tyndaRouter);
+
 
 
 

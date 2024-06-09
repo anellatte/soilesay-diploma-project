@@ -240,7 +240,6 @@ router.get('/sozdlycurrent', authenticateUser, async (req, res) => {
 });
 
 router.get('/sozdlylevel', authenticateUser, async (req, res) => {
-    console.log('Fetching Sozdly level:', req.query.level);
     const level = parseInt(req.query.level, 10);
     if (isNaN(level)) {
         return res.status(400).json({ message: 'Invalid level parameter' });
@@ -259,7 +258,6 @@ router.get('/sozdlylevel', authenticateUser, async (req, res) => {
 });
 
 router.get('/sozdlycompleted', authenticateUser, async (req, res) => {
-    console.log('Fetching completed Sozdly levels for user:', req.user._id);
     try {
         const user = req.user;
         const levels = await Sozdly.find({ level: { $lte: user.sozdlyLevel } }).sort({ level: -1 });
@@ -271,7 +269,6 @@ router.get('/sozdlycompleted', authenticateUser, async (req, res) => {
 });
 
 router.post('/sozdlyupdateLevel', authenticateUser, async (req, res) => {
-    console.log('Updating Sozdly level for user:', req.user._id);
     try {
         const user = req.user;
         const { level } = req.body;
