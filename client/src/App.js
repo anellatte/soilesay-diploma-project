@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
 import Account from "./components/account/Account";
 import Sidebar from "./components/sidebar/Sidebar";
 import SuraqJauap from "./components/suraq-jauap/SuraqJauap";
@@ -36,14 +36,31 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userData, setUserData] = useState({});
 
+    useEffect(() => {
+        // Check if there is a token in localStorage
+        const token = localStorage.getItem('token');
+        if (token) {
+            // Decode token and set user data
+            const storedUserData = JSON.parse(localStorage.getItem('userData'));
+            setIsAuthenticated(true);
+            setUserData(storedUserData);
+        }
+    }, []);
+
     const handleLogin = (userData) => {
         setIsAuthenticated(true);
         setUserData(userData);
+        // Store user data and token in localStorage
+        localStorage.setItem('token', userData.token);
+        localStorage.setItem('userData', JSON.stringify(userData));
     };
 
     const handleLogout = () => {
         setIsAuthenticated(false);
         setUserData({});
+        // Remove user data and token from localStorage
+        localStorage.removeItem('token');
+        localStorage.removeItem('userData');
     };
 
     return (

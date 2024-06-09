@@ -7,7 +7,7 @@ const LandingPage = () => {
     <div className="landing-page-container">
       <header className="landing-page-header">
         <div className="landing-page-logo-container">
-          <img src="/images/logo.png"className="landing-page-logo" />
+          <img src="/images/logo.png" className="landing-page-logo" />
           <div className="landing-page-logo-text">SoileSay</div>
         </div>
         <div className="landing-page-language-and-auth">
@@ -27,7 +27,7 @@ const LandingPage = () => {
           <Link to="/signup" className="landing-page-main-signup-btn">Sign up for free</Link>
         </div>
         <div className="landing-page-image-content">
-          <img src="/images/left_pic.png"/>
+          <img src="/images/left_pic.png" />
         </div>
       </main>
     </div>
