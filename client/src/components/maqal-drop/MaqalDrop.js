@@ -74,7 +74,6 @@ const MaqalDrop = () => {
         setInitialWords([...initialWords, ...arrangedWords]);
     };
 
-
     const checkAnswers = async () => {
         const sentence = arrangedWords.join(' ');
         const maqalDropData = await getMaqalDropByLevel(currentLevel);
@@ -138,7 +137,6 @@ const MaqalDrop = () => {
                 <div className='maqal-drop__inner'>
                     <h1 className="maqal-drop__title title">MAQAL DROP</h1>
 
-
                     <div className='suraq-desc'>
                         <p className='suraq-desc__title'>Level {currentLevel}</p>
                         <div className="word-containers">
@@ -170,7 +168,7 @@ const MaqalDrop = () => {
                                         <Button
                                             key={index}
                                             draggable
-                                              variant="outline-primary"
+                                            variant="outline-primary"
                                             onDragStart={(event) => onDragStart(event, word, true)}
                                             className="m-2"
                                             style={{ padding: "8px", cursor: "move" }}
@@ -196,19 +194,25 @@ const MaqalDrop = () => {
                     </div>
                 </div>
 
-
                 <div className='levels'>
                     <div className='levels__inner'>
                         <h2 className="levels__title">LEVELS</h2>
-                        {completedLevels.map(level => (
-                            <Button
-                                key={level._id}
-                                className="level__number"
-                                onClick={() => handleLevelClick(level.level)}
-                            >
-                                Level {level.level}
-                            </Button>
-                        ))}
+                        {[...Array(maqalDropLevel).keys()].map(i => {
+                            const level = i + 1;
+                            const isDisabled = level > maqalDropLevel;
+
+                            return (
+                                <Button
+                                    key={level}
+                                    className="level__number"
+                                    onClick={() => handleLevelClick(level)}
+                                    disabled={isDisabled}
+                                    style={isDisabled ? { backgroundColor: 'grey', cursor: 'not-allowed' } : {}}
+                                >
+                                    Level {level}
+                                </Button>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

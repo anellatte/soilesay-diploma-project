@@ -48,7 +48,7 @@ const Talda = () => {
         };
 
         fetchUserData();
-    }, [setTaldaLevel, setCurrentLevel, setWords, setCorrectAnalysis, setCompletedLevels, setFeedbackMessage]);
+    }, []);
 
     const handleWordClick = (index) => {
         if (selectedType) {
@@ -171,21 +171,22 @@ const Talda = () => {
                 <div className='levels'>
                     <div className='levels__inner'>
                         <h2 className="levels__title">LEVELS</h2>
-                        {completedLevels.map(level => (
-                            <Button
-                                key={level._id}
-                                className="level__number"
-                                onClick={() => handleLevelClick(level.level)}
-                            >
-                                Level {level.level}
-                            </Button>
-                        ))}
-                        {/*<Button*/}
-                        {/*    className="level__number"*/}
-                        {/*    onClick={() => handleLevelClick(taldaLevel)}*/}
-                        {/*>*/}
-                        {/*    Current Level {taldaLevel}*/}
-                        {/*</Button>*/}
+                        {[...Array(taldaLevel).keys()].map(i => {
+                            const level = i + 1;
+                            const isDisabled = level > taldaLevel;
+
+                            return (
+                                <Button
+                                    key={level}
+                                    className="level__number"
+                                    onClick={() => handleLevelClick(level)}
+                                    disabled={isDisabled}
+                                    style={isDisabled ? { backgroundColor: 'grey', cursor: 'not-allowed' } : {}}
+                                >
+                                    Level {level}
+                                </Button>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

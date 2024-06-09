@@ -895,3 +895,10 @@ body {
   background-color: rgb(209, 209, 209) !important;
   border: none !important;
 }
+
+/* MAQAL DROP */
+
+.maqal-drop__inner{
+  max-width: 800px;
+  margin: auto;
+}
