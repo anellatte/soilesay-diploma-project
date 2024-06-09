@@ -50,7 +50,7 @@ const AdminSozdlyEdit = () => {
                             required
                         />
                     </Form.Group>
-                    <Button variant="primary" type="submit">Save Changes</Button>
+                    <Button className='mt-3' variant="primary" type="submit">Save Changes</Button>
                 </Form>
             </div>
         </Container>

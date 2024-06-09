@@ -2,6 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button, Container, Alert, Form } from 'react-bootstrap';
 import { getUserProfile, getSozdlyByLevel, updateSozdlyLevel, getCompletedSozdly } from '../api';
 
+const kazakhAlphabet = [
+    'А', 'Ә', 'Б', 'В', 'Г', 'Ғ', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Қ', 'Л', 'М', 'Н', 'Ң', 'О', 'Ө', 'П',
+    'Р', 'С', 'Т', 'У', 'Ұ', 'Ү', 'Ф', 'Х', 'Һ', 'Ц', 'Ч', 'Ш', 'Щ', 'Ы', 'І', 'Э', 'Ю', 'Я', 'Ъ', 'Ь'
+];
+
 const Sozdly = () => {
     const [guesses, setGuesses] = useState(Array(6).fill(''));
     const [currentGuess, setCurrentGuess] = useState('');
@@ -14,6 +19,7 @@ const Sozdly = () => {
     const [noMoreLevels, setNoMoreLevels] = useState(false);
     const [isLevelCompleted, setIsLevelCompleted] = useState(false);
     const [wordsList, setWordsList] = useState([]);
+    const [keyColors, setKeyColors] = useState({});
     const inputRef = useRef(null);
 
     useEffect(() => {
@@ -62,6 +68,9 @@ const Sozdly = () => {
         const value = event.target.value.toUpperCase();
         if (value.length <= 5) {
             setCurrentGuess(value);
+            const newGuesses = [...guesses];
+            newGuesses[attempt] = value;
+            setGuesses(newGuesses);
         }
     };
 
@@ -69,6 +78,23 @@ const Sozdly = () => {
         if (event.key === 'Enter') {
             checkAnswer();
         }
+    };
+
+    const updateKeyColors = (guess) => {
+        const newKeyColors = { ...keyColors };
+        for (let i = 0; i < guess.length; i++) {
+            const letter = guess[i];
+            if (currentWord[i] === letter) {
+                newKeyColors[letter] = '#10B981';
+            } else if (currentWord.includes(letter)) {
+                if (newKeyColors[letter] !== '#10B981') {
+                    newKeyColors[letter] = '#F59E0B';
+                }
+            } else {
+                newKeyColors[letter] = '#94A3B8';
+            }
+        }
+        setKeyColors(newKeyColors);
     };
 
     const checkAnswer = async () => {
@@ -85,6 +111,8 @@ const Sozdly = () => {
         const newGuesses = [...guesses];
         newGuesses[attempt] = currentGuess;
         setGuesses(newGuesses);
+
+        updateKeyColors(currentGuess);
 
         if (currentGuess === currentWord) {
             setFeedbackMessage('Correct!');
@@ -138,6 +166,7 @@ const Sozdly = () => {
                 setCurrentLevel(level);
                 setNoMoreLevels(false); // Reset no more levels message when switching levels
                 setIsLevelCompleted(false); // Reset level completion state
+                setKeyColors({}); // Reset keyboard colors
             } else {
                 setFeedbackMessage('Failed to load sozdly level');
             }
@@ -152,12 +181,35 @@ const Sozdly = () => {
         }
     };
 
+    const handleKeyboardClick = (letter) => {
+        if (letter === 'Enter') {
+            checkAnswer();
+            return;
+        }
+
+        if (letter === 'Delete') {
+            setCurrentGuess(currentGuess.slice(0, -1));
+            const newGuesses = [...guesses];
+            newGuesses[attempt] = currentGuess.slice(0, -1);
+            setGuesses(newGuesses);
+            return;
+        }
+
+        if (currentGuess.length < 5) {
+            const newGuess = currentGuess + letter;
+            setCurrentGuess(newGuess);
+            const newGuesses = [...guesses];
+            newGuesses[attempt] = newGuess;
+            setGuesses(newGuesses);
+        }
+    };
+
     const getBackgroundColor = (guess, index) => {
         const guessLetter = guess[index];
         const correctLetter = currentWord[index];
 
         if (guessLetter === correctLetter) {
-            return 'green';
+            return '#10B981';
         }
 
         if (currentWord.includes(guessLetter)) {
@@ -165,11 +217,11 @@ const Sozdly = () => {
             const correctLetterCount = currentWord.split('').filter(letter => letter === guessLetter).length;
 
             if (guessLetterCount <= correctLetterCount) {
-                return 'yellow';
+                return '#F59E0B';
             }
         }
 
-        return 'gray';
+        return '#94A3B8';
     };
 
     return (
@@ -178,49 +230,84 @@ const Sozdly = () => {
                 <div className='sozdly__inner'>
                     <h1 className="sozdly__title title">SOZDLY</h1>
 
-                    <div className='suraq-desc'>
-                        <p className='suraq-desc__title'>Level {currentLevel}</p>
-                        {guesses.map((guess, attemptIndex) => (
-                            <div key={attemptIndex} className="guess-input d-flex justify-content-between mb-2">
-                                {attemptIndex === attempt && !isLevelCompleted ? (
-                                    <Form.Control
-                                        ref={inputRef}
-                                        type="text"
-                                        value={currentGuess}
-                                        onChange={handleGuessChange}
-                                        onKeyPress={handleKeyPress}
-                                        maxLength="5"
-                                        style={{ width: '300px', textAlign: 'center', fontSize: '2em' }}
-                                    />
-                                ) : (
-                                    [...Array(5)].map((_, index) => (
+                    <div className='sozdly-game__container'>
+                        <div className='suraq-desc sozdly__grid'>
+                            <p className='suraq-desc__title'>Level {currentLevel}</p>
+                            {guesses.map((guess, attemptIndex) => (
+                                <div key={attemptIndex} className="guess-input d-flex justify-content-between mb-2">
+                                    {[...Array(5)].map((_, index) => (
                                         <Form.Control
                                             key={index}
                                             type="text"
                                             value={guess[index] || ''}
                                             readOnly
+                                            onClick={attemptIndex === attempt ? handleCellClick : undefined}
+                                            maxLength="1"
                                             style={{
-                                                width: '60px',
+                                                width: '50px',
+                                                height: '50px',
                                                 textAlign: 'center',
                                                 fontSize: '2em',
-                                                backgroundColor: getBackgroundColor(guess, index)
+                                                backgroundColor: guess[index] && isLevelCompleted && guess === currentWord ? 'green' : attemptIndex < attempt ? getBackgroundColor(guess, index) : 'white'
                                             }}
                                         />
-                                    ))
-                                )}
+                                    ))}
+                                </div>
+                            ))}
+                            <Form.Control
+                                ref={inputRef}
+                                type="text"
+                                value={currentGuess}
+                                onChange={handleGuessChange}
+                                onKeyPress={handleKeyPress}
+                                maxLength="5"
+                                style={{ opacity: 0, height: 0 }}
+                            />
+                            <Button className="mt-4 grid__button" onClick={checkAnswer}>Check</Button>
+                            {feedbackMessage && (
+                                <Alert variant={feedbackMessage.startsWith('Correct') ? 'success' : 'danger'} className="mt-4">
+                                    {feedbackMessage}
+                                </Alert>
+                            )}
+                            {noMoreLevels && (
+                                <Alert variant="info" className="mt-4">
+                                    Wow, you've reached the end of our current levels. Congratulations on your achievement. We're grateful for your dedication. We're working on adding new levels, and we'll let you know as soon as they're ready.
+                                </Alert>
+                            )}
+                        </div>
+
+                        <div className='keyboard'>
+                            <div className='keyboard__inner'>
+                                {kazakhAlphabet.map(letter => (
+                                    <Button
+                                        key={letter}
+                                        className="keyboard__key"
+                                        onClick={() => handleKeyboardClick(letter)}
+                                        style={{ backgroundColor: keyColors[letter] || 'white', margin: '2px', width: '40px', height: '40px', color: 'black' }}
+                                    >
+                                        {letter}
+                                    </Button>
+                                ))}
+                                <div className='sozdly-keys__buttons'>
+                                    <Button
+                                        className="keyboard__key delete"
+                                        onClick={() => handleKeyboardClick('Delete')}
+                                        style={{ backgroundColor: 'black', margin: '2px', width: '100px', height: '40px' }}
+                                    >
+                                        Delete
+                                    </Button>
+                                    <Button
+                                        className="keyboard__key enter"
+                                        onClick={() => handleKeyboardClick('Enter')}
+                                        style={{ background: 'linear-gradient(#A6ECEC, #FAD7EA)', margin: '2px', width: '100px', height: '40px', color: 'black', border: '1px solid black' }}
+                                    >
+                                        Enter
+                                    </Button>
+                                </div>
                             </div>
-                        ))}
-                        <Button variant="success" className="mt-4" onClick={checkAnswer}>Check</Button>
-                        {feedbackMessage && (
-                            <Alert variant={feedbackMessage.startsWith('Correct') ? 'success' : 'danger'} className="mt-4">
-                                {feedbackMessage}
-                            </Alert>
-                        )}
-                        {noMoreLevels && (
-                            <Alert variant="info" className="mt-4">
-                                Wow, you've reached the end of our current levels. Congratulations on your achievement. We're grateful for your dedication. We're working on adding new levels, and we'll let you know as soon as they're ready.
-                            </Alert>
-                        )}
+                        </div>
+
+
                     </div>
                 </div>
 

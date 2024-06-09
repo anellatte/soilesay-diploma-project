@@ -839,3 +839,59 @@ body {
 .profile__username{
   font-family: 'Days One';
 }
+
+/* SOZDLY */
+.sozdly__inner{
+  width: 900px;
+}
+
+.sozdly__grid{
+  max-width: 400px;
+  margin: auto;
+}
+
+.sozdly__title{
+  margin-bottom: 30px;
+}
+
+.grid__button{
+  margin-top: 0 !important;
+  background: #10B981;
+  border: none;
+}
+
+.sozdly-game__container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+}
+
+.keyboard__inner{
+  max-width: 280px;
+}
+
+.keyboard__inner{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.sozdly-keys__buttons{
+  width: 280px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.keyboard button{
+  border: 1px solid lightgrey;
+}
+
+.keyboard__key {
+  transition: background-color 0.5s;
+}
+
+.keyboard__key:hover {
+  background-color: rgb(209, 209, 209) !important;
+  border: none !important;
+}

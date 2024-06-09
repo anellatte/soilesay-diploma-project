@@ -48,7 +48,7 @@ const AdminSozdlyAdd = () => {
                         />
                         {error && <Alert variant="danger" className="mt-2">{error}</Alert>}
                     </Form.Group>
-                    <Button variant="primary" type="submit" disabled={!!error}>Add Level</Button>
+                    <Button className='mt-3' variant="primary" type="submit" disabled={!!error}>Add Level</Button>
                 </Form>
             </div>
         </Container>
