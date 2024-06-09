@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
         cb(null, 'uploads/audio/');
     },
     filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + file.originalname);
+        cb(null, Date.now() + '-' + file.originalname); // Ensure unique filenames
     }
 });
 
@@ -25,25 +25,22 @@ const upload = multer({
     }
 });
 
-// Get all levels (Admin)
-router.get('/all', authenticateUser, checkAdmin, async (req, res) => {
+// Get all levels
+router.get('/', async (req, res) => {
     try {
-        const levels = await Tynda.find().sort({ createdAt: -1 });
+        const levels = await Tynda.find().sort({ level: 1 });
         res.json(levels);
     } catch (error) {
         res.status(500).json({ message: "Error fetching levels" });
     }
 });
 
-// Create a new level (Admin)
+// Create a new level
 router.post('/', authenticateUser, checkAdmin, upload.single('audio'), async (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ message: "No audio file uploaded or invalid file type." });
-    }
-    const { word } = req.body;
-    const audioPath = req.file.path;
+    const { word, level } = req.body;
+    const audioPath = req.file?.path;
     try {
-        const newLevel = new Tynda({ word, audioPath });
+        const newLevel = new Tynda({ word, audioPath, level });
         await newLevel.save();
         res.status(201).json(newLevel);
     } catch (error) {
@@ -64,7 +61,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Update a level (Admin)
+// Update a level
 router.put('/:id', authenticateUser, checkAdmin, upload.single('audio'), async (req, res) => {
     try {
         const level = await Tynda.findById(req.params.id);
@@ -72,6 +69,7 @@ router.put('/:id', authenticateUser, checkAdmin, upload.single('audio'), async (
             return res.status(404).json({ message: "Level not found" });
         }
         level.word = req.body.word || level.word;
+        level.level = req.body.level || level.level;
         if (req.file) {
             level.audioPath = req.file.path;
         }
@@ -82,7 +80,7 @@ router.put('/:id', authenticateUser, checkAdmin, upload.single('audio'), async (
     }
 });
 
-// Delete a level (Admin)
+// Delete a level
 router.delete('/:id', authenticateUser, checkAdmin, async (req, res) => {
     try {
         const level = await Tynda.findByIdAndDelete(req.params.id);

@@ -34,6 +34,9 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import LandingPage from './components/landing/LandingPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
+import AdminTyndaAdd from "./components/admin/AdminTyndaAdd";
+import AdminTyndaEdit from "./components/admin/AdminTyndaEdit";
+import AdminTynda from "./components/admin/AdminTynda";
 
 
 function App() {
@@ -105,6 +108,8 @@ function App() {
                                             <Route path="/admin/talda" element={<AdminTalda />} />
                                             <Route path="/admin/sozdly" element={<AdminSozdly />} />
                                             <Route path="/admin/puzzle" element={<AdminPuzzle />} />
+                                            <Route path="/admin/tynda" element={<AdminTynda />} />
+
                                             <Route path="/admin" element={
                                                 <>
                                                     <AdminPage />
@@ -122,6 +127,8 @@ function App() {
                                             <Route path="/admin/sozdly/edit/:id" element={<AdminSozdlyEdit />} />
                                             <Route path="/admin/puzzle/add" element={<AdminPuzzleAdd />} />
                                             <Route path="/admin/puzzle/edit/:id" element={<AdminPuzzleEdit />} />
+                                            <Route path="/admin/tynda/add" element={<AdminTyndaAdd />} />
+                                            <Route path="/admin/tynda/edit/:id" element={<AdminTyndaEdit />} />
                                         </>
                                     )}
                                 </Routes>

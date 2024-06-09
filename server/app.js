@@ -35,7 +35,6 @@ app.use("/api/tynda", tyndaRouter);
 
 
 
-
 app.use('/uploads', express.static('uploads'));
 
 // MongoDB connection

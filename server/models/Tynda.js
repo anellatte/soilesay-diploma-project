@@ -8,6 +8,10 @@ const tyndaSchema = new mongoose.Schema({
     audioPath: {
         type: String,
         required: true
+    },
+    level: {
+        type: Number,
+        required: true
     }
 });
 
