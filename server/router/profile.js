@@ -6,6 +6,7 @@ const authenticateUser = require('../middleware/authenticateUser');
 const Talda = require('../models/talda');
 const SuraqJauap = require('../models/SuraqJauap');
 const Sozdly = require('../models/sozdly');
+const MaqalDrop = require('../models/MaqalDrop')
 const router = express.Router();
 
 // Set storage engine
@@ -294,5 +295,56 @@ router.post('/sozdlyupdateLevel', authenticateUser, async (req, res) => {
         res.status(500).json({ message: 'Error updating Sozdly level', error: error.message });
     }
 });
+
+// Get MaqalDrop level by specific level number
+router.get('/maqalDropLevel', authenticateUser, async (req, res) => {
+    const { level } = req.query;
+    try {
+        const maqalDrop = await MaqalDrop.findOne({ level: parseInt(level) });
+        if (!maqalDrop) {
+            return res.status(404).json({ message: 'Level not found' });
+        }
+        res.json(maqalDrop);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching level' });
+    }
+});
+
+// Update the user's MaqalDrop level
+router.post('/maqalDropUpdateLevel', authenticateUser, async (req, res) => {
+    try {
+        const user = req.user;
+        const { level } = req.body;
+
+        if (level !== user.maqalLevel) {
+            return res.json({ message: 'You can only advance from your current highest level', maqalLevel: user.maqalLevel });
+        }
+
+        const nextLevel = user.maqalLevel + 1;
+        const nextLevelExists = await MaqalDrop.exists({ level: nextLevel });
+
+        if (!nextLevelExists) {
+            return res.json({ message: 'No more levels', maqalLevel: user.maqalLevel });
+        }
+
+        user.maqalLevel = nextLevel;
+        await user.save();
+        res.json({ maqalLevel: user.maqalLevel });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating MaqalDrop level', error: error.message });
+    }
+});
+
+// Get all completed MaqalDrop levels for the current user
+router.get('/maqalDropCompleted', authenticateUser, async (req, res) => {
+    try {
+        const user = req.user;
+        const levels = await MaqalDrop.find({ level: { $lt: user.maqalLevel } }).sort({ level: -1 });
+        res.json(levels);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching completed levels' });
+    }
+});
+
 
 module.exports = router;

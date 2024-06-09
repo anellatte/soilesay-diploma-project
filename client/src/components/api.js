@@ -261,4 +261,60 @@ export const updateSozdlyLevel = async (currentLevel) => {
     }
 };
 
+// MaqalDrop API calls
+
+// Get MaqalDrop level by specific level number
+export const getMaqalDropByLevel = async (level) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/api/profile/maqalDropLevel`, {
+            params: { level: Number(level) },
+            headers: {
+                'Authorization': `Bearer ${getToken()}`
+            }
+        });
+        console.log(`Fetched MaqalDrop data for level ${level}:`, response.data);
+        if (!response.data || !response.data.sentence) {
+            return { noData: true }; // Indicate no data found for this level
+        }
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching MaqalDrop by level:', error);
+        if (error.response && error.response.status === 404) {
+            return { noData: true }; // Handle 404 error
+        }
+        return { error: true }; // Indicate an error occurred
+    }
+};
+
+// Get all completed MaqalDrop levels for the current user
+export const getCompletedMaqalDrop = async () => {
+    try {
+        const response = await axios.get(`${BASE_URL}/api/profile/maqalDropCompleted`, {
+            headers: {
+                'Authorization': `Bearer ${getToken()}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching completed MaqalDrop levels:', error);
+        throw error;
+    }
+};
+
+// Update the user's MaqalDrop level
+export const updateMaqalDropLevel = async (currentLevel) => {
+    try {
+        const response = await axios.post(`${BASE_URL}/api/profile/maqalDropUpdateLevel`, { level: Number(currentLevel) }, {
+            headers: {
+                'Authorization': `Bearer ${getToken()}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating MaqalDrop level:', error);
+        return { message: 'Error', maqalDropLevel: null };
+    }
+};
+
+
 export default api;
