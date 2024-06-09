@@ -902,3 +902,140 @@ body {
   max-width: 800px;
   margin: auto;
 }
+
+
+/* LANDING PAGE */
+/* src/components/LandingPage.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Days+One&display=swap');
+.landing-page-container::before{
+    content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 400px;
+      height: 400px;
+      transform: translate(-50%, -50%) rotate(70deg);
+      background-image: linear-gradient(to right, #77E6E6 50%, #F684C2 50%);
+      border-radius: 50%;
+      filter: blur(140px);
+      z-index: -1; /* чтобы гарантировать, что он будет на заднем плане */
+}
+
+.landing-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.landing-page-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #af8e8e;
+}
+
+.landing-page-logo-container {
+  display: flex;
+  align-items: center;
+  font-family: 'Days One', sans-serif;
+
+}
+
+.landing-page-logo {
+  height: 90px;
+  margin-right: 10px;
+}
+
+.landing-page-logo-text {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: 'Days One', sans-serif;
+}
+
+.landing-page-language-and-auth {
+  display: flex;
+  align-items: center;
+}
+
+.landing-page-language-select {
+  margin-right: 20px;
+}
+
+.landing-page-btn {
+  margin-left: 10px;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.landing-page-btn-primary {
+  background: linear-gradient(#A8ECEB, #F6D8E1);
+  padding:10px 30px;
+  color: black;
+  border: 1px solid black;
+}
+
+.landing-page-btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: 1px solid black;
+}
+
+.landing-page-main-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 0;
+  width: 89%;
+  margin-top:40px
+}
+
+.landing-page-text-content {
+  max-width: 50%;
+  margin-right: 20px;
+}
+
+.landing-page-heading {
+  font-size: 48px;
+  margin-bottom: 20px;
+  font-family: 'Days One', sans-serif;
+}
+
+.landing-page-description {
+  font-size: 18px;
+  margin-bottom: 30px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.landing-page-main-signup-btn {
+  margin-bottom: 20px;
+  font-weight: bold;
+  background: linear-gradient(#A8ECEB, #F6D8E1);
+  padding:15px 30px;
+  color: #000000;
+  border-radius: 10px;
+  border:1px solid black;
+}
+
+.landing-page-app-download {
+  margin-top: 20px;
+}
+
+.landing-page-app-links img {
+  width: 150px;
+  margin-right: 10px;
+}
+
+.landing-page-image-content {
+  max-width: 50%;
+  margin-left: 20px;
+}
+
+.landing-page-image-content img {
+  width: 100%;
+  max-width: 400px;
+}

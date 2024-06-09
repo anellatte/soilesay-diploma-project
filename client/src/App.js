@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
 import Account from "./components/account/Account";
 import Sidebar from "./components/sidebar/Sidebar";
 import SuraqJauap from "./components/suraq-jauap/SuraqJauap";
@@ -28,6 +28,7 @@ import AdminSozdly from './components/admin/AdminSozdly';
 import AdminSozdlyAdd from './components/admin/AdminSozdlyAdd';
 import AdminSozdlyEdit from './components/admin/AdminSozdlyEdit';
 import ErrorBoundary from "./components/ErrorBoundary";
+import LandingPage from './components/landing/LandingPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
@@ -35,14 +36,31 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userData, setUserData] = useState({});
 
+    useEffect(() => {
+        // Check if there is a token in localStorage
+        const token = localStorage.getItem('token');
+        if (token) {
+            // Decode token and set user data
+            const storedUserData = JSON.parse(localStorage.getItem('userData'));
+            setIsAuthenticated(true);
+            setUserData(storedUserData);
+        }
+    }, []);
+
     const handleLogin = (userData) => {
         setIsAuthenticated(true);
         setUserData(userData);
+        // Store user data and token in localStorage
+        localStorage.setItem('token', userData.token);
+        localStorage.setItem('userData', JSON.stringify(userData));
     };
 
     const handleLogout = () => {
         setIsAuthenticated(false);
         setUserData({});
+        // Remove user data and token from localStorage
+        localStorage.removeItem('token');
+        localStorage.removeItem('userData');
     };
 
     return (
@@ -52,7 +70,8 @@ function App() {
                     {!isAuthenticated ? (
                         <div className="authorization">
                             <Routes>
-                                <Route path="/" element={<SignIn onLogin={handleLogin} />} />
+                                <Route path="/" element={<LandingPage />} />
+                                <Route path="/signin" element={<SignIn onLogin={handleLogin} />} />
                                 <Route path="/signup" element={<SignUp onLogin={handleLogin} />} />
                             </Routes>
                         </div>
@@ -61,6 +80,7 @@ function App() {
                             <Sidebar isAdmin={userData.isAdmin} />
                             <div className="content">
                                 <Routes>
+                                    <Route path="/" element={<LandingPage />} />
                                     <Route path="/home" element={
                                         <>
                                             <Home />
@@ -69,7 +89,7 @@ function App() {
                                     } />
                                     <Route path="/tanda" element={<Tanda />} />
                                     <Route path="/maqalDrop" element={<MaqalDrop />} />
-                                    <Route path="/suraqJauap" element={<SuraqJauap/>} />
+                                    <Route path="/suraqJauap" element={<SuraqJauap />} />
                                     <Route path="/talda" element={<Talda />} />
                                     <Route path="/sozdly" element={<Sozdly />} />
                                     <Route path="/profile" element={<Profile />} />

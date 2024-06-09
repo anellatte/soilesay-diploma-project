@@ -22,7 +22,7 @@ function SignIn({ onLogin }) {
             const data = await signIn(email, password);
 
             if (data.status === "exist") {
-                onLogin({ email, username: data.username, isAdmin: data.isAdmin });
+                onLogin({ email, username: data.username, isAdmin: data.isAdmin, token: data.token });
                 if (data.isAdmin) {
                     navigate("/admin");
                 } else {
