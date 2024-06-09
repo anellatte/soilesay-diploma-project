@@ -28,6 +28,7 @@ import AdminSozdly from './components/admin/AdminSozdly';
 import AdminSozdlyAdd from './components/admin/AdminSozdlyAdd';
 import AdminSozdlyEdit from './components/admin/AdminSozdlyEdit';
 import ErrorBoundary from "./components/ErrorBoundary";
+import LandingPage from './components/landing/LandingPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
@@ -52,7 +53,8 @@ function App() {
                     {!isAuthenticated ? (
                         <div className="authorization">
                             <Routes>
-                                <Route path="/" element={<SignIn onLogin={handleLogin} />} />
+                                <Route path="/" element={<LandingPage />} />
+                                <Route path="/signin" element={<SignIn onLogin={handleLogin} />} />
                                 <Route path="/signup" element={<SignUp onLogin={handleLogin} />} />
                             </Routes>
                         </div>
@@ -61,6 +63,7 @@ function App() {
                             <Sidebar isAdmin={userData.isAdmin} />
                             <div className="content">
                                 <Routes>
+                                    <Route path="/" element={<LandingPage />} />
                                     <Route path="/home" element={
                                         <>
                                             <Home />
@@ -69,7 +72,7 @@ function App() {
                                     } />
                                     <Route path="/tanda" element={<Tanda />} />
                                     <Route path="/maqalDrop" element={<MaqalDrop />} />
-                                    <Route path="/suraqJauap" element={<SuraqJauap/>} />
+                                    <Route path="/suraqJauap" element={<SuraqJauap />} />
                                     <Route path="/talda" element={<Talda />} />
                                     <Route path="/sozdly" element={<Sozdly />} />
                                     <Route path="/profile" element={<Profile />} />
