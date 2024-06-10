@@ -412,4 +412,13 @@ router.post('/tyndaupdateLevel', authenticateUser, async (req, res) => {
     }
 });
 
+router.get('/users', authenticateUser, async (req, res) => {
+    try {
+        const users = await User.find({}, 'username taldaLevel SJLevel sozdlyLevel maqalLevel tyndaLevel');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 module.exports = router;

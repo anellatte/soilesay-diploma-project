@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllNews } from '../admin/api';
-import { getApprovedEvents, getNotifications, markNotificationAsRead } from '../api'; // Adjust import path as needed
+import { getApprovedEvents, getNotifications, markNotificationAsRead } from '../api'; 
 import { Card, Container, Row, Col, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
@@ -47,6 +47,10 @@ const Home = () => {
         navigate('/eventForm');
     };
 
+    const handleLeaderBoard = () => {
+        navigate('/leaderBoard');
+    };
+
     const handleDismissNotification = async (id) => {
         try {
             await markNotificationAsRead(id);
@@ -62,6 +66,7 @@ const Home = () => {
                 <div className='home__inner'>
                     <h1 className='home__title title'>HOME</h1>
                     <Button variant="primary" onClick={handleAddEvent} className="mb-4">Add Event</Button>
+                    <Button variant="primary" onClick={handleLeaderBoard} className="mb-4">Leader Board</Button>
                     {notifications.map(notification => (
                         <Alert key={notification._id} variant="info" onClose={() => handleDismissNotification(notification._id)} dismissible>
                             {notification.message}

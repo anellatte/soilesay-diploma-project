@@ -1,3 +1,4 @@
+// models/user.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
@@ -47,7 +48,6 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 1
   },
-
   notifications: [{
     message: { type: String },
     isRead: { type: Boolean, default: false }
@@ -74,6 +74,5 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 };
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);
-
 
 module.exports = User;

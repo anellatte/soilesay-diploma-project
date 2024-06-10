@@ -23,6 +23,7 @@ import AdminTaldaEdit from "./components/admin/AdminTaldaEdit";
 import AdminSJAdd from "./components/admin/AdminSJAdd";
 import AdminSJEdit from "./components/admin/AdminSJEdit";
 import EventForm from './components/home/EventForm';
+import LeaderBoard from './components/home/LeaderBoard';
 import AdminMDAdd from './components/admin/AdminMDAdd';
 import AdminMDEdit from './components/admin/AdminMDEdit';
 import AdminSozdly from './components/admin/AdminSozdly';
@@ -103,6 +104,7 @@ function App() {
                                     <Route path="/tynda" element={<Tynda />} />
                                     <Route path="/profile" element={<Profile />} />
                                     <Route path="/eventForm" element={<EventForm />} />
+                                    <Route path="/leaderBoard" element={<LeaderBoard />} />
                                     {userData.isAdmin && (
                                         <>
                                             <Route path="/adminMaqalDrop" element={<AdminMaqalDrop username={userData.username} />} />

@@ -507,7 +507,7 @@ body {
 }
 
 /* SIGN IN */
-.signin::before{
+.signin::before, .leader-board::before{
   content: '';
     position: fixed;
     top: 50%;
@@ -1043,4 +1043,29 @@ body {
 .landing-page-image-content img {
   width: 100%;
   max-width: 400px;
+}
+
+/* LEADER BOARD */
+.leader__inner{
+  max-width: 850px;
+  margin: auto;
+}
+
+.leader__inner table{
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+}
+
+.leader-board::before{
+  content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 40vw;
+    height: 40vh;
+    transform: translate(-50%, -50%) rotate(30deg);
+    background-image: linear-gradient(to right, #77E6E6 50%, #F684C2 50%);
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: -1; /* чтобы гарантировать, что он будет на заднем плане */
 }

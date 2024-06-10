@@ -417,4 +417,14 @@ export const deleteTynda = async (id) => {
     }
 };
 
+export const getAllUsersWithLevels = async () => {
+    try {
+        const response = await api.get('/api/profile/users'); // Ensure this matches your backend route
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching users with levels:', error);
+        throw error;
+    }
+};
+
 export default api;

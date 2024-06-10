@@ -13,7 +13,7 @@ const eventRouter = require("./router/event");
 const sozdlyRouter = require('./router/sozdly');
 const puzzleRouter = require('./router/puzzle');
 const tyndaRouter = require('./router/tynda');
-
+const usersRouter = require('./router/users');
 
 
 const app = express();
@@ -32,7 +32,7 @@ app.use("/api/events", eventRouter);
 app.use('/api/sozdly', sozdlyRouter);
 app.use("/api/puzzle", puzzleRouter);
 app.use("/api/tynda", tyndaRouter);
-
+app.use('/api/users', usersRouter);
 
 
 app.use('/uploads', express.static('uploads'));
