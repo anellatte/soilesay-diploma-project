@@ -6,7 +6,8 @@ const authenticateUser = require('../middleware/authenticateUser');
 const Talda = require('../models/talda');
 const SuraqJauap = require('../models/SuraqJauap');
 const Sozdly = require('../models/sozdly');
-const MaqalDrop = require('../models/MaqalDrop')
+const MaqalDrop = require('../models/MaqalDrop');
+const Tynda = require('../models/Tynda'); // Add this import
 const router = express.Router();
 
 // Set storage engine
@@ -85,7 +86,8 @@ router.get('/', authenticateUser, async (req, res) => {
             taldaLevel: user.taldaLevel,
             SJlevel: user.SJLevel,
             maqalLevel: user.maqalLevel,
-            sozdlyLevel: user.sozdlyLevel
+            sozdlyLevel: user.sozdlyLevel,
+            tyndaLevel: user.tyndaLevel // Add this line
         });
     } catch (error) {
         res.status(500).json({ msg: "An error occurred while retrieving the profile" });
@@ -293,7 +295,7 @@ router.post('/sozdlyupdateLevel', authenticateUser, async (req, res) => {
     }
 });
 
-// Get MaqalDrop level by specific level number
+// MaqalDrop
 router.get('/maqalDropLevel', authenticateUser, async (req, res) => {
     const { level } = req.query;
     try {
@@ -307,7 +309,6 @@ router.get('/maqalDropLevel', authenticateUser, async (req, res) => {
     }
 });
 
-// Update the user's MaqalDrop level
 router.post('/maqalDropUpdateLevel', authenticateUser, async (req, res) => {
     try {
         const user = req.user;
@@ -332,7 +333,6 @@ router.post('/maqalDropUpdateLevel', authenticateUser, async (req, res) => {
     }
 });
 
-// Get all completed MaqalDrop levels for the current user
 router.get('/maqalDropCompleted', authenticateUser, async (req, res) => {
     try {
         const user = req.user;
@@ -343,5 +343,73 @@ router.get('/maqalDropCompleted', authenticateUser, async (req, res) => {
     }
 });
 
+// Tynda
+router.get('/tyndacurrent', authenticateUser, async (req, res) => {
+    try {
+        const user = req.user;
+        const tynda = await Tynda.findOne({ level: user.tyndaLevel });
+        if (!tynda) {
+            return res.status(404).json({ message: 'Current Tynda level not found' });
+        }
+        res.json(tynda);
+    } catch (error) {
+        console.error('Error fetching current Tynda level:', error);
+        res.status(500).json({ message: "Error fetching current Tynda level" });
+    }
+});
+
+router.get('/tyndalevel', authenticateUser, async (req, res) => {
+    const level = parseInt(req.query.level, 10);
+    if (isNaN(level)) {
+        return res.status(400).json({ message: 'Invalid level parameter' });
+    }
+
+    try {
+        const tynda = await Tynda.findOne({ level: level });
+        if (!tynda) {
+            return res.status(404).json({ message: 'Level not found' });
+        }
+        res.json(tynda);
+    } catch (error) {
+        console.error('Error fetching Tynda level:', error);
+        res.status(500).json({ message: 'Error fetching Tynda level' });
+    }
+});
+
+router.get('/tyndacompleted', authenticateUser, async (req, res) => {
+    try {
+        const user = req.user;
+        const levels = await Tynda.find({ level: { $lte: user.tyndaLevel } }).sort({ level: -1 });
+        res.json(levels);
+    } catch (error) {
+        console.error('Error fetching completed Tynda levels:', error);
+        res.status(500).json({ message: 'Error fetching completed Tynda levels' });
+    }
+});
+
+router.post('/tyndaupdateLevel', authenticateUser, async (req, res) => {
+    try {
+        const user = req.user;
+        const { level } = req.body;
+
+        if (level !== user.tyndaLevel) {
+            return res.json({ message: 'You can only advance from your current highest level', tyndaLevel: user.tyndaLevel });
+        }
+
+        const nextLevel = user.tyndaLevel + 1;
+        const nextLevelExists = await Tynda.exists({ level: nextLevel });
+
+        if (!nextLevelExists) {
+            return res.json({ message: 'No more levels', tyndaLevel: user.tyndaLevel });
+        }
+
+        user.tyndaLevel = nextLevel;
+        await user.save();
+        res.json({ tyndaLevel: user.tyndaLevel });
+    } catch (error) {
+        console.error('Error updating Tynda level:', error);
+        res.status(500).json({ message: 'Error updating Tynda level', error: error.message });
+    }
+});
 
 module.exports = router;

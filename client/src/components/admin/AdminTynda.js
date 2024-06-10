@@ -30,18 +30,18 @@ const AdminTynda = () => {
     return (
         <Container className="admin content__body">
             <div className='admin__inner'>
-                <h2 className="admin__title title">Manage Tynda Levels</h2>
-                <div className="mb-4">
-                    <Link to="/admin/tynda/add" className="btn btn-primary">Add New Level</Link>
+                <h2 className="admin__title title">ADMIN TYNDA</h2>
+                <div className="d-flex justify-content-center mb-4">
+                    <Link to="/admin/tynda/add" className="btn btn-primary">Add Level</Link>
                 </div>
                 <Row>
                     {levels.map(level => (
                         <Col key={level._id} md={4} className="mb-4">
                             <Card className="h-100 d-flex flex-column">
-                                <Card.Body className="d-flex flex-column">
+                                <Card.Body >
                                     <div>
-                                        <Card.Title>{level.word}</Card.Title>
-                                        <Card.Text><strong>Level:</strong> {level.level}</Card.Text>
+                                        <Card.Title>Level {level.level}</Card.Title>
+                                        <Card.Text>{level.word}</Card.Text>
                                     </div>
                                     <div className="mt-3">
                                         <audio controls style={{ width: '100%' }} src={`http://localhost:8000/${level.audioPath}`} />

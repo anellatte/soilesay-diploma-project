@@ -903,6 +903,11 @@ body {
   margin: auto;
 }
 
+.tynda__inner{
+  max-width: 800px;
+  margin: auto;
+}
+
 
 /* LANDING PAGE */
 /* src/components/LandingPage.css */

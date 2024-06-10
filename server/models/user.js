@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 1
   },
-  TyndaLevel: {
+  tyndaLevel: {
     type: Number,
     default: 1
   },

@@ -316,5 +316,105 @@ export const updateMaqalDropLevel = async (currentLevel) => {
     }
 };
 
+// Tynda API calls
+export const getAllTynda = async () => {
+    try {
+        const response = await api.get('/tynda');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Tynda levels:', error);
+        throw error;
+    }
+};
+
+export const getTyndaById = async (id) => {
+    try {
+        const response = await api.get(`/tynda/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Tynda level by ID:', error);
+        throw error;
+    }
+};
+
+export const getTyndaByLevel = async (level) => {
+    try {
+        const response = await api.get('/api/profile/tyndalevel', { params: { level } });
+        if (!response.data || !response.data.word) {
+            return { noData: true };
+        }
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Tynda by level:', error);
+        if (error.response && error.response.status === 404) {
+            return { noData: true };
+        }
+        return { error: true };
+    }
+};
+
+export const getCompletedTynda = async () => {
+    try {
+        const response = await api.get('/api/profile/tyndacompleted');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching completed Tynda levels:', error);
+        throw error;
+    }
+};
+
+export const updateTyndaLevel = async (currentLevel) => {
+    try {
+        const response = await api.post('/api/profile/tyndaupdateLevel', { level: currentLevel });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating Tynda level:', error);
+        return { message: 'Error', tyndaLevel: null };
+    }
+};
+
+export const addTynda = async (formData) => {
+    try {
+        const response = await api.post('/tynda', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 400) {
+            throw new Error(error.response.data.message || "Bad request, please check the input.");
+        } else {
+            throw new Error("An error occurred while adding the Tynda level.");
+        }
+    }
+};
+
+export const updateTynda = async (id, formData) => {
+    try {
+        const response = await api.put(`/tynda/${id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 400) {
+            throw new Error(error.response.data.message || "Bad request, please check the input.");
+        } else {
+            throw new Error("An error occurred while updating the Tynda level.");
+        }
+    }
+};
+
+export const deleteTynda = async (id) => {
+    try {
+        const response = await api.delete(`/tynda/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting Tynda level:', error);
+        throw error;
+    }
+};
 
 export default api;

@@ -58,7 +58,7 @@ const AdminTyndaEdit = () => {
     return (
         <Container className="admin content__body">
             <div className='admin__inner'>
-                <h2 className="admin__title title">Edit Tynda Level</h2>
+                <h2 className="admin__title title">EDIT TYNDA</h2>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="word">
                         <Form.Label>Word</Form.Label>

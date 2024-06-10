@@ -1,22 +1,24 @@
 const express = require('express');
-const router = express.Router();
 const multer = require('multer');
-const Tynda = require('../models/Tynda'); // Adjust the path as necessary
+const Tynda = require('../models/Tynda');
 const authenticateUser = require("../middleware/authenticateUser");
 const { checkAdmin } = require("../middleware/checkAdmin");
+
+const router = express.Router();
+
 // Configure Multer for audio uploads
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, 'uploads/audio/');
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname); // Ensure unique filenames
     }
 });
 
 const upload = multer({
     storage: storage,
-    fileFilter: function(req, file, cb) {
+    fileFilter: function (req, file, cb) {
         if (file.mimetype === 'audio/mpeg' || file.mimetype === 'audio/mp3') {
             cb(null, true);
         } else {

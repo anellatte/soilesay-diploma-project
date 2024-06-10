@@ -7,6 +7,7 @@ import MaqalDrop from "./components/maqal-drop/MaqalDrop";
 import Talda from "./components/talda/Talda";
 import Tanda from "./components/tanda/Tanda";
 import Sozdly from "./components/sozdly/Sozdly";
+import Tynda from "./components/tynda/Tynda";
 import Home from "./components/home/Home";
 import SignIn from "./components/authorization/SignIn";
 import SignUp from "./components/authorization/SignUp";
@@ -99,6 +100,7 @@ function App() {
                                     <Route path="/suraqJauap" element={<SuraqJauap />} />
                                     <Route path="/talda" element={<Talda />} />
                                     <Route path="/sozdly" element={<Sozdly />} />
+                                    <Route path="/tynda" element={<Tynda />} />
                                     <Route path="/profile" element={<Profile />} />
                                     <Route path="/eventForm" element={<EventForm />} />
                                     {userData.isAdmin && (
